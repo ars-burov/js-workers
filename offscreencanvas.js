@@ -1,5 +1,5 @@
 onmessage = function(evt) {
-    const imgSize = 1000;
+    const imgSize = 10000;
 
     const c = evt.data.canvas;
     const ctx = c.getContext("2d");

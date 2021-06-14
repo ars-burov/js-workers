@@ -12,7 +12,7 @@
         <div id="flex">
             <button id="btn">Canvas</button>
             <button id="fbn">Arr Ops</button>
-            <div class="animate">Did MT Block?</div>
+            <div class="animate" id="check">Did MT Block?</div>
         </div>
         <br />
         <canvas width="500" height="500" id="canvas">Your browser does not support canvas =(</canvas>
@@ -45,6 +45,18 @@
         }
     </script>
 
+    <script>
+        const checkBox = document.getElementById("check")
+        const cycler = () => setTimeout(() => {
+            checkBox.classList.add("secondary");
+            setTimeout(() => {
+                checkBox.classList.remove("secondary");
+                cycler();
+            }, 1000);
+        }, 1000);
+        cycler();
+    </script>
+
     <style>
         #flex {
             display: flex;
@@ -59,6 +71,10 @@
 
         .animate {
             animation: move 5s infinite;
+        }
+
+        .animate.secondary {
+            background: grey;
         }
 
         @keyframes move {
