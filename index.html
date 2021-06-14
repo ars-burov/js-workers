@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workers test</title>
+</head>
+<body>
+    <div>
+        <h3>Workers</h3>
+        <div id="flex">
+            <button id="btn">Canvas</button>
+            <button id="fbn">Arr Ops</button>
+            <div class="animate">Did MT Block?</div>
+        </div>
+        <br />
+        <canvas width="500" height="500" id="canvas">Your browser does not support canvas =(</canvas>
+    </div>
+
+    <script>
+        const canvasBtn = document.getElementById("btn");
+        canvasBtn.onclick = () => {
+            const canvas = document.getElementById("canvas");
+            const offscreen = canvas.transferControlToOffscreen();
+
+            const worker = new Worker("offscreencanvas.js");;
+            worker.postMessage({canvas: offscreen}, [offscreen]);
+        }
+    </script>
+
+    <script>
+        const fibButton = document.getElementById("fbn");
+        fibButton.onclick = async (e) => {
+            const start = Date.now();
+
+            const worker = new Worker("worker.js");
+            const arr = new Uint16Array(300000000);
+            worker.postMessage(arr, [arr.buffer]);
+            worker.onmessage = function(e) {
+                const end = Date.now();
+                const diff = start - end;
+                console.log(`Transfer completed in ${diff}ms`);
+            }
+        }
+    </script>
+
+    <style>
+        #flex {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #btn {
+            width: 100px;
+            height: 25px;
+            margin-right: 5px;
+        }
+
+        .animate {
+            animation: move 5s infinite;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(100px, 0);
+            }
+            50% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(100px, 0);
+            }
+        }
+    </style>
+</body>
+</html>
